@@ -37,7 +37,7 @@ $(function() {
     }
 
     function resize() {
-      // todo: resize way to much, once for every tab
+      // todo: resizes way too much, once for every tab
 
       var height = $('select2-container').outerHeight() +
         $('.select2-results').outerHeight()
