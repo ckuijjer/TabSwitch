@@ -23,6 +23,19 @@ $(function() {
       .on('select2-selecting', switchTab)
       .select2("open");
 
+    // close the window if escape is pressed and the search field is empty
+    // unfortunately the keydown of select2 fires first, so we don't know what
+    // the value of the search field was. this is a hacky way to try to remember
+    // it hardly works, but it's a start.
+    var prev = null;
+    $('.select2-input').keydown(function(e) {
+      if (e.keyCode === 27 && !prev) {
+        window.close();
+      }
+
+      prev = $('.select2-input').val();
+    })
+
     // internal functions
     function reopen() {
       $select.select2("open");
