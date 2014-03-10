@@ -109,12 +109,12 @@ $(function() {
       }
 
       var matches = $(terms)
-                    // make all terms uppercase
-                    .map(function(i, el) { return el.toUpperCase(); })
-                    // does the term occurs in the text?
-                    .map(function(i, el) { return text.indexOf(el) >= 0 })
-                    // remove the False ones
-                    .filter(function(i, el) { return el; });
+        // make all terms uppercase
+        .map(function(i, el) { return el.toUpperCase(); })
+        // does the term occurs in the text?
+        .map(function(i, el) { return text.indexOf(el) >= 0 })
+        // remove the False ones
+        .filter(function(i, el) { return el; });
 
       // all terms should occur in the text
       return matches.length == terms.length;
