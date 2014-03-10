@@ -12,8 +12,8 @@ $(function() {
       tabsDict[tab.id] = tab;
 
       $('<option>')
-        .text(tab.title)
         .val(tab.id)
+        .text(tab.title)
         .appendTo($select);
     });
 
@@ -94,8 +94,14 @@ $(function() {
       // todo: resizes way too often, once for every tab
       window.setTimeout(resize, 1);
 
-      var textU = text.toUpperCase();
+      var text = text.toUpperCase();
       var terms = term.trim().split(/\s+/);
+
+      // todo: perhaps also include the url in the search
+      // however sorting the results is needed for that, simply also searching
+      // the entire url would lead to bad behaviour
+      var tabId = opt.val();
+      var url = tabsDict[tabId].url.toUpperCase();
 
       // empty search matches everything
       if (!term) {
@@ -106,7 +112,7 @@ $(function() {
                     // make all terms uppercase
                     .map(function(i, el) { return el.toUpperCase(); })
                     // does the term occurs in the text?
-                    .map(function(i, el) { return textU.indexOf(el) >= 0; })
+                    .map(function(i, el) { return text.indexOf(el) >= 0 })
                     // remove the False ones
                     .filter(function(i, el) { return el; });
 
