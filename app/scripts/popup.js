@@ -5,8 +5,12 @@ $(function() {
   chrome.tabs.getAllInWindow(null, function(tabs) {
     var $select = $('select');
 
+    var tabsDict = {};
+
     // add tabs to the select tag
     $(tabs).each(function(i, tab) {
+      tabsDict[tab.id] = tab;
+
       $('<option>')
         .text(tab.title)
         .val(tab.id)
@@ -17,6 +21,8 @@ $(function() {
     $select
       .select2({
         matcher: matcher,
+        formatResult: format,
+        formatSelection: format,
         closeOnSelect: false
       })
       .on('select2-close', reopen)
@@ -37,6 +43,32 @@ $(function() {
     })
 
     // internal functions
+    function format(el) {
+      var tab = tabsDict[el.id];
+
+      var result = $('<div />');
+
+      var favIcon = $('<img />')
+        .attr('src', getFavIconUrl(tab))
+        .attr('class', 'tab-icon')
+        .appendTo(result);
+
+      var text = $('<span />')
+        .attr('class', 'tab-text')
+        .text(tab.title)
+        .appendTo(result);
+
+      return result.html();
+    }
+
+    function getFavIconUrl(tab) {
+      if (tab.favIconUrl) {
+        return tab.favIconUrl;
+      } else {
+        return 'http://placekitten.com/16/16';
+      }
+    }
+
     function reopen() {
       $select.select2("open");
     }
@@ -50,8 +82,6 @@ $(function() {
     }
 
     function resize() {
-      // todo: resizes way too much, once for every tab
-
       var height = $('select2-container').outerHeight() +
         $('.select2-results').outerHeight()
         + 40; // todo: magic number and probably OS dependent
@@ -61,6 +91,7 @@ $(function() {
 
     function matcher(term, text, opt) {
       // hack to resize on search
+      // todo: resizes way too often, once for every tab
       window.setTimeout(resize, 1);
 
       var textU = text.toUpperCase();
@@ -79,7 +110,7 @@ $(function() {
                     // remove the False ones
                     .filter(function(i, el) { return el; });
 
-      // all terms should be in the text
+      // all terms should occur in the text
       return matches.length == terms.length;
     }
   });

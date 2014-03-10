@@ -21,3 +21,11 @@ body {
 .select2-result {
   white-space: nowrap;
 }
+
+.tab-icon {
+  margin-top: 1px;
+  margin-right: 6px;
+  width: 16px;
+  height: 16px;
+  vertical-align: top;
+}
