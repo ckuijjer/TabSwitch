@@ -143,19 +143,22 @@ module.exports = function (grunt) {
         },*/
         useminPrepare: {
             options: {
-                dest: '<%= yeoman.dist %>'
+                dest: '<%= yeoman.dist %>',
             },
             html: [
                 '<%= yeoman.app %>/popup.html',
-                '<%= yeoman.app %>/options.html'
             ]
         },
         usemin: {
             options: {
-                dirs: ['<%= yeoman.dist %>']
+                dirs: ['<%= yeoman.dist %>'],
+                flow: {
+                  steps: {'js' : ['concat'] },
+                  post: []
+                }
             },
             html: ['<%= yeoman.dist %>/{,*/}*.html'],
-            css: ['<%= yeoman.dist %>/styles/{,*/}*.css']
+            css: ['<%= yeoman.dist %>/styles/{,*/}*.css'],
         },
         imagemin: {
             dist: {
@@ -289,7 +292,7 @@ module.exports = function (grunt) {
         'concurrent:dist',
         'cssmin',
         'concat',
-        'uglify',
+//        'uglify',
         'copy',
         'usemin',
         'compress'
