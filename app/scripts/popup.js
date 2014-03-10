@@ -65,7 +65,7 @@ $(function() {
       if (tab.favIconUrl) {
         return tab.favIconUrl;
       } else {
-        return 'http://placekitten.com/16/16';
+        return 'images/no-favicon.png';
       }
     }
 
