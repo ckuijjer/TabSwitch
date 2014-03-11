@@ -23,6 +23,7 @@ $(function() {
         matcher: matcher,
         formatResult: format,
         formatSelection: format,
+        formatNoMatches: formatNoMatches,
         closeOnSelect: false
       })
       .on('select2-close', reopen)
@@ -59,6 +60,10 @@ $(function() {
         .appendTo(result);
 
       return result.html();
+    }
+
+    function formatNoMatches() {
+      return '<div class="no-match">No matches found.</div>';
     }
 
     function getFavIconUrl(tab) {

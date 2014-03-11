@@ -22,6 +22,16 @@ body {
   white-space: nowrap;
 }
 
+.no-match {
+  background-color: #f2dede;
+  color: #d9534f;
+  padding: 3px;
+  border: 1px solid #d9534f;
+  border-radius: 3px;
+  text-align: center;
+
+}
+
 .tab-icon {
   margin-top: 1px;
   margin-right: 6px;
