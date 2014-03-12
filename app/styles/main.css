@@ -23,13 +23,12 @@ body {
 }
 
 .no-match {
-  background-color: #f2dede;
-  color: #d9534f;
   padding: 3px;
   border: 1px solid #d9534f;
   border-radius: 3px;
   text-align: center;
-
+  background-color: #f2dede;
+  color: #d9534f;
 }
 
 .tab-icon {

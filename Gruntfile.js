@@ -153,8 +153,8 @@ module.exports = function (grunt) {
             options: {
                 dirs: ['<%= yeoman.dist %>'],
                 flow: {
-                  steps: {'js' : ['concat'] },
-                  post: []
+                    steps: {'js' : ['concat'] },
+                    post: []
                 }
             },
             html: ['<%= yeoman.dist %>/{,*/}*.html'],
