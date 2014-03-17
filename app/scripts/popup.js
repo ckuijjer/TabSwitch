@@ -2,24 +2,42 @@
 
 $(function() {
     // chrome.tabs.query(null, function(tabs) {
-    chrome.tabs.getAllInWindow(null, function(tabs) {
+    chrome.tabs.getAllInWindow(null, function(tabArray) {
         var $select = $('select');
-        var tabsDict = {};
+        var tabs = {};
+        var windowId = tabArray[0].windowId;
+        var bg = chrome.extension.getBackgroundPage();
+        var mru = bg.MostRecentOrder.get(windowId);
 
         // add tabs to the select tag
-        $(tabs).each(function(i, tab) {
-            tab.uri = new URI(tab.url);
-            tabsDict[tab.id] = tab;
+        tabArray.sort(function(a, b) {
+                var indexA = mru.indexOf(a.id);
+                var indexB = mru.indexOf(b.id);
 
-            $('<option>')
-            .val(tab.id)
-            .text(tab.title)
-            .appendTo($select);
+                if (indexA === -1 || indexB === -1) {
+                    return indexB - indexA;
+                } else {
+                    return indexA - indexB;
+                }
+            });
+
+        // put the current tab at the end
+        var current = tabArray.shift();
+        tabArray.push(current);
+
+        tabArray.forEach(function(tab) {
+                tab.uri = new URI(tab.url);
+                tabs[tab.id] = tab;
+
+                $('<option>')
+                    .val(tab.id)
+                    .text(tab.title)
+                    .appendTo($select);
         });
 
         // internal functions
         function format(el) {
-            var tab = tabsDict[el.id];
+            var tab = tabs[el.id];
 
             return $('<div />')
                 .append($('<img />')
