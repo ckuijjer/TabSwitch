@@ -9,7 +9,7 @@ $(function() {
         var bg = chrome.extension.getBackgroundPage();
         var mru = bg.MostRecentOrder.get(windowId);
 
-        // add tabs to the select tag
+        // use the most recent order from the background page to order the tabs
         tabArray.sort(function(a, b) {
                 var indexA = mru.indexOf(a.id);
                 var indexB = mru.indexOf(b.id);
@@ -25,6 +25,7 @@ $(function() {
         var current = tabArray.shift();
         tabArray.push(current);
 
+        // add tabs to the select tag
         tabArray.forEach(function(tab) {
                 tab.uri = new URI(tab.url);
                 tabs[tab.id] = tab;
@@ -54,7 +55,7 @@ $(function() {
         }
 
         function getFavIconUrl(tab) {
-            if (tab.favIconUrl) {
+            if (tab.favIconUrl && tab.favIconUrl.indexOf('chrome://') !== 0 ) {
                 return tab.favIconUrl;
             } else {
                 return 'images/no-favicon.png';

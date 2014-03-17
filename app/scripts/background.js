@@ -6,7 +6,7 @@ var MostRecentOrder = {
     get: function(windowId) {
         return mru[windowId] || [];
     }
-}
+};
 
 function add(windowId, tabId) {
     var windowMru = mru[windowId] || [];
