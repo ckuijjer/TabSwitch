@@ -75,9 +75,8 @@ $(function() {
         }
 
         function resize() {
-            var height = $('select2-container').outerHeight() +
-                $('.select2-results').outerHeight() +
-                40; // todo: magic number and probably OS dependent
+            var height = $('.select2-container').outerHeight() +
+                $('.select2-drop').outerHeight();
 
             $('body').height(height);
         }
