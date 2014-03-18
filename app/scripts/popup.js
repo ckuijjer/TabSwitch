@@ -81,8 +81,7 @@ $(function() {
             $('body').height(height);
         }
 
-        // function matcher(term, text, opt) {
-        function matcher(term, text) {
+        function matcher(term, text, opt) {
             // hack to resize on search
             // todo: resizes way too often, once for every tab
             window.setTimeout(resize, 1);
@@ -90,11 +89,17 @@ $(function() {
             text = text.toUpperCase();
             var terms = term.trim().split(/\s+/);
 
-            // todo: perhaps also include the url in the search
-            // however sorting the results is needed for that, simply also searching
-            // the entire url would lead to bad behaviour
-            // var tabId = opt.val();
-            // var url = tabsDict[tabId].uri;
+            // todo: to use the entire url we need term weighting
+            var tabId = opt.val();
+
+            // add the hostname minus the tld to the text to search on
+            var url = tabs[tabId].uri;
+            var hostname = url.hostname()
+            var tldLocation = hostname.indexOf(url.tld());
+            if (tldLocation > 0) {
+                hostname = hostname.substring(0, tldLocation - 1);
+            }
+            text = text + ' ' + hostname.toUpperCase();
 
             // empty search matches everything
             if (!term) {
@@ -102,12 +107,12 @@ $(function() {
             }
 
             var matches = $(terms)
-            // make all terms uppercase
-            .map(function(i, el) { return el.toUpperCase(); })
-            // does the term occurs in the text?
-            .map(function(i, el) { return text.indexOf(el) >= 0; })
-            // remove the False ones
-            .filter(function(i, el) { return el; });
+                // make all terms uppercase
+                .map(function(i, el) { return el.toUpperCase(); })
+                // does the term occurs in the text?
+                .map(function(i, el) { return text.indexOf(el) > -1; })
+                // remove the False ones
+                .filter(function(i, el) { return el; });
 
             // all terms should occur in the text
             return matches.length === terms.length;
@@ -115,16 +120,16 @@ $(function() {
 
         // initialize select2
         $select
-        .select2({
-            matcher: matcher,
-            formatResult: format,
-            formatSelection: format,
-            formatNoMatches: formatNoMatches,
-            closeOnSelect: false
-        })
-        .on('select2-close', reopen)
-        .on('select2-selecting', switchTab)
-        .select2('open');
+            .select2({
+                matcher: matcher,
+                formatResult: format,
+                formatSelection: format,
+                formatNoMatches: formatNoMatches,
+                closeOnSelect: false
+            })
+            .on('select2-close', reopen)
+            .on('select2-selecting', switchTab)
+            .select2('open');
 
         // close the window if escape is pressed and the search field is empty
         // unfortunately the keydown of select2 fires first, so we don't know what
