@@ -37,17 +37,82 @@ $(function() {
         });
 
         // internal functions
-        function format(el) {
+        function format(el, container, query) {
             var tab = tabs[el.id];
+            var title = tab.title.toUpperCase();
+            var terms = splitTerm(query.term.toUpperCase());
+
+            var locations = terms
+                // find all start/end combinations for the terms
+                .map(function(term) {
+                    var index = title.indexOf(term);
+                    return [index, index + term.length];
+                })
+                // remove the ones where the term wasn't found
+                .filter(function(location) {
+                    return location[0] !== -1;
+                })
+                // sort them based on start, then end location
+                .sort(function(a, b) {
+                    if (a[0] !== b[0]) {
+                        return a[0] - b[0];
+                    } else {
+                        return a[1] - b[1];
+                    }
+                })
+                // walk through all the locations and merge overlapping locations
+                .reduce(function(merged, current) {
+                    var previous = merged.pop();
+                    if (previous) {
+                        if (previous[1] > current[0]) {
+                            previous[1] = Math.max(previous[1], current[1]);
+                            merged.push(previous);
+                        } else {
+                            merged.push(previous);
+                            merged.push(current);
+                        }
+                    } else {
+                        merged.push(current);
+                    }
+                    return merged;
+                }, []);
+
+
+            var titleWithMatches = $('<span />')
+                .attr('class', 'tab-text');
+
+            var previous = 0;
+            locations.forEach(function(location) {
+                var start = location[0];
+                var end = location[1];
+
+                if (previous < start) {
+                    var nomatch = tab.title.substring(previous, start);
+                    titleWithMatches.append(document.createTextNode(nomatch));
+                }
+
+                var match = tab.title.substring(start, end);
+                titleWithMatches.append($('<span />')
+                    .attr('class', 'tab-match')
+                    .text(match));
+
+                previous = end;
+            });
+            if (previous < tab.title.length) {
+                var nomatch = tab.title.substring(previous);
+                titleWithMatches.append(document.createTextNode(nomatch));
+            }
 
             return $('<div />')
                 .append($('<img />')
                     .attr('src', getFavIconUrl(tab))
                     .attr('class', 'tab-icon'))
-                .append($('<span />')
-                    .attr('class', 'tab-text')
-                    .text(tab.title))
+                .append(titleWithMatches)
                 .html();
+        }
+
+        function splitTerm(term) {
+            return term.trim().split(/\s+/);
         }
 
         function formatNoMatches() {
@@ -87,7 +152,7 @@ $(function() {
             window.setTimeout(resize, 1);
 
             text = text.toUpperCase();
-            var terms = term.trim().split(/\s+/);
+            var terms = splitTerm(term);
 
             // todo: to use the entire url we need term weighting
             var tabId = opt.val();
