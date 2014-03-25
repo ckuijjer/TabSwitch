@@ -27,13 +27,13 @@ $(function() {
 
         // add tabs to the select tag
         tabArray.forEach(function(tab) {
-                tab.uri = new URI(tab.url);
-                tabs[tab.id] = tab;
+            tab.uri = new URI(tab.url);
+            tabs[tab.id] = tab;
 
-                $('<option>')
-                    .val(tab.id)
-                    .text(tab.title)
-                    .appendTo($select);
+            $('<option>')
+                .val(tab.id)
+                .text(tab.title)
+                .appendTo($select);
         });
 
         // internal functions
@@ -98,7 +98,7 @@ $(function() {
 
             // add the hostname minus the tld to the text to search on
             var url = tabs[tabId].uri;
-            var hostname = url.hostname()
+            var hostname = url.hostname();
             var tldLocation = hostname.indexOf(url.tld());
             if (tldLocation > 0) {
                 hostname = hostname.substring(0, tldLocation - 1);
