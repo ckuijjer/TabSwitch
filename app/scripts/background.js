@@ -4,7 +4,8 @@ var mru = {};
 
 var MostRecentOrder = {
     get: function(windowId) {
-        return mru[windowId] || [];
+        var order = mru[windowId] || [];
+        return order;
     }
 };
 
@@ -20,7 +21,9 @@ function add(windowId, tabId) {
 function remove(windowId, tabId) {
     var windowMru = mru[windowId];
     if (windowMru) {
-        windowMru = windowMru.filter(function(i) { return i !== tabId; });
+        mru[windowId] = windowMru.filter(function(i) {
+            return i !== tabId;
+        });
     }
 }
 
@@ -49,3 +52,21 @@ chrome.tabs.onActivated.addListener(function(activeInfo) {
 chrome.tabs.onRemoved.addListener(function(tabId, removeInfo) {
     remove(removeInfo.windowId, tabId);
 });
+
+// event listener for switching to the previous tab
+chrome.commands.onCommand.addListener(function(command) {
+    if (command === 'previous') {
+        switchToPrevious();
+    }
+});
+
+function switchToPrevious() {
+    chrome.windows.getCurrent(function(currentWindow) {
+        var order = MostRecentOrder.get(currentWindow.id);
+
+        if (order && order.length >= 1) {
+            var previousTab = order[1];
+            chrome.tabs.update(previousTab, { active: true, highlighted: true });
+        }
+    });
+}

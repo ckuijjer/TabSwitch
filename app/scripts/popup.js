@@ -37,7 +37,8 @@ $(function() {
         });
 
         // internal functions
-        function format(el, container, query) {
+        // function format(el, container, query) {
+        function format(el) {
             var tab = tabs[el.id];
 
             return $('<div />')
@@ -74,7 +75,7 @@ $(function() {
             // we don't want to make a selection in the input field
             e.preventDefault();
 
-            chrome.tabs.update(+e.val, { selected: true });
+            chrome.tabs.update(+e.val, { active: true, highlighted: true });
             window.close();
         }
 
