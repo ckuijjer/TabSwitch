@@ -9,12 +9,21 @@ var MostRecentOrder = {
     }
 };
 
-function add(windowId, tabId) {
+// Adding an activated tab should put it in front of the MRU
+function addActive(windowId, tabId) {
     var windowMru = mru[windowId] || [];
 
     windowMru = windowMru.filter(function(i) { return i !== tabId; });
     windowMru.unshift(tabId);
 
+    mru[windowId] = windowMru;
+}
+
+// Adding a created tab should put it at the second spot of the MRU
+function addCreated(windowId, tabId) {
+    var windowMru = mru[windowId] || [];
+    windowMru.splice(1,0,tabId);
+    // windowMru.push(tabId);
     mru[windowId] = windowMru;
 }
 
@@ -27,37 +36,39 @@ function remove(windowId, tabId) {
     }
 }
 
+/*
+function log(message, windowId, tabId) {
+    try {
+        chrome.tabs.get(tabId, function(tab) {
+            console.log(mru[windowId].join(' '));
+            console.log(`${message}: ${tab.id} - ${tab.status} - ${tab.url}`);
+        });
+    } catch(e) {
+        console.warn(e);
+    }
+}
+*/
+
 chrome.runtime.onInstalled.addListener(function (details) {
     console.log('previousVersion', details.previousVersion);
 });
 
-// todo:
-// onCreated messes up the most recently used ordering
-// example is creating a tab in the background
-// this also holds for onUpdated I think, but simply having
-// these events doesn't fix it.
-
 chrome.tabs.onCreated.addListener(function (tab) {
-    add(tab.windowId, tab.id);
+    addCreated(tab.windowId, tab.id);
 });
 
+/* No reason I think to change the MRU when a tab gets updated
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
     add(tab.windowId, tab.id);
 });
+*/
 
 chrome.tabs.onActivated.addListener(function(activeInfo) {
-    add(activeInfo.windowId, activeInfo.tabId);
+    addActive(activeInfo.windowId, activeInfo.tabId);
 });
 
 chrome.tabs.onRemoved.addListener(function(tabId, removeInfo) {
     remove(removeInfo.windowId, tabId);
-});
-
-// event listener for switching to the previous tab
-chrome.commands.onCommand.addListener(function(command) {
-    if (command === 'previous') {
-        switchToPrevious();
-    }
 });
 
 function switchToPrevious() {
@@ -70,3 +81,10 @@ function switchToPrevious() {
         }
     });
 }
+
+// event listener for switching to the previous tab
+chrome.commands.onCommand.addListener(function(command) {
+    if (command === 'previous') {
+        switchToPrevious();
+    }
+});
