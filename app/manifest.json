@@ -1,6 +1,6 @@
 {
     "name": "Tab Switch",
-    "version": "0.0.38",
+    "version": "0.0.42",
     "manifest_version": 2,
     "description": "Easily switch between tabs by searching",
     "icons": {
@@ -30,10 +30,6 @@
             "description": "Open tab menu"
         },
         "previous": {
-            "suggested_key": {
-                "default": "Ctrl+D",
-                "mac": "Command+D"
-            },
             "description": "Switch to the previous tab"
         }
     },
