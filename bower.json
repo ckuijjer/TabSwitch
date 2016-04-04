@@ -1,6 +1,10 @@
 {
   "name": "tabswitch",
   "version": "0.0.0",
-  "dependencies": {},
+  "dependencies": {
+    "jquery": "^2.2.2",
+    "URI.js": "uri.js#^1.17.1",
+    "select2": "3.4.8"
+  },
   "devDependencies": {}
 }
