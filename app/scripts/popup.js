@@ -131,11 +131,10 @@ $(function () {
         // initialize select2
         $select
           .select2({
-            matcher: matcher,
+            matcher,
             formatResult: format,
             formatSelection: format,
-            formatNoMatches: formatNoMatches,
-            closeOnSelect: false,
+            formatNoMatches,
           })
           .on('select2-close', reopen)
           .on('select2-selecting', switchTab)
