@@ -2,13 +2,20 @@
 
 A tab switching extension for Google Chrome
 
-## build
+## package
 
-To build a version that can be uploaded to the Chrome Web Store
+To package a version that can be uploaded to the Chrome Web Store
 
-* `gem install compass`
-* `npm install -g grunt`
-* `npm install -g bower`
-* `npm install`
-* `bower install`
-* `grunt build`
+```sh
+cd package
+rm TabSwitch.zip
+rm -rf TabSwitch
+cp -r ../app TabSwitch
+zip -r TabSwitch.zip TabSwitch
+```
+
+## format
+
+```sh
+npx prettier --write .
+```
