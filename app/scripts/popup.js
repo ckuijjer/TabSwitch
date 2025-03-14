@@ -40,7 +40,7 @@ $(function () {
             .append(
               $('<img />')
                 .attr('src', getFavIconUrl(tab))
-                .attr('class', 'tab-icon')
+                .attr('class', 'tab-icon'),
             )
             .append($('<span />').attr('class', 'tab-text').text(tab.title))
             .html();
@@ -152,7 +152,7 @@ $(function () {
 
           prev = $('.select2-input').val();
         });
-      }
+      },
     );
   });
 });
