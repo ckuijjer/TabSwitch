@@ -7,6 +7,7 @@ A tab switching extension for Google Chrome
 To package a version that can be uploaded to the Chrome Web Store
 
 ```sh
+mkdir package
 cd package
 rm TabSwitch.zip
 rm -rf TabSwitch
