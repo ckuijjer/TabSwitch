@@ -1,6 +1,6 @@
 {
   "name": "Tab Switch",
-  "version": "0.0.54",
+  "version": "1.0.0",
   "manifest_version": 3,
   "description": "Easily switch between tabs by searching",
   "icons": {
